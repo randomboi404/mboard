@@ -14,3 +14,13 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  session:
+    store-type: none
+server:
+  servlet:
+    session:
+      timeout: 1200
+    cookie:
+      name: M_BOARD
+      http-only: true
+      secure: false
