@@ -1,6 +1,12 @@
 spring:
   application:
     name: mboard
+  web:
+    resources:
+      static-locations: 
+        - "file:./external-static/"
+        - "classpath:/static/"
+        - "classpath:/public/"
   h2:
     console:
       enabled: true

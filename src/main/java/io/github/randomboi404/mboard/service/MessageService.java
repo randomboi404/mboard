@@ -1,6 +1,6 @@
 package io.github.randomboi404.mboard.service;
 
-import io.github.randomboi404.mboard.dto.MessageRequest;
+import io.github.randomboi404.mboard.model.UserPrincipal;
 import io.github.randomboi404.mboard.model.Message;
 import io.github.randomboi404.mboard.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,28 +14,28 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class MessageService {
 
-    private final MessageRepository msgRepo;
+    private final MessageRepository repo;
     private final NotificationService notificationService;
 
     public Page<Message> getMessages(Pageable pageable) {
-        return msgRepo.findAll(pageable);
+        return repo.findAll(pageable);
     }
 
     public void saveMessage(Message message) {
-        msgRepo.saveAndFlush(message);
+        repo.save(message);
     }
 
     public void deleteMessage(String id) {
-        msgRepo.deleteById(id);
+        repo.deleteById(id);
     }
 
-    public void processAndBroadcast(MessageRequest request) {
+    public void processAndBroadcast(UserPrincipal userPrincipal, String messageContent) {
         Message message = new Message(
-                request.username(),
-                request.message(),
+                userPrincipal.getUsername(),
+                messageContent,
                 Instant.now().toString()
         );
-
+        
         this.saveMessage(message);
 
         notificationService.broadcast(
