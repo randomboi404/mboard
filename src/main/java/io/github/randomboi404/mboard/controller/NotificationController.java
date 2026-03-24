@@ -1,6 +1,6 @@
 package io.github.randomboi404.mboard.controller;
 
-import io.github.randomboi404.mboard.dto.ActiveCountRequest;
+import io.github.randomboi404.mboard.dto.ActiveCountResponse;
 import io.github.randomboi404.mboard.service.NotificationService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +30,8 @@ public class NotificationController {
     }
 
     @GetMapping("/users/active")
-    public ActiveCountRequest getActiveUsersCount() {
-        return new ActiveCountRequest(notifService.getEmittersCount());
+    public ActiveCountResponse getActiveUsersCount() {
+        return new ActiveCountResponse(notifService.getEmittersCount());
     }
 
     @PostMapping("/typing")
