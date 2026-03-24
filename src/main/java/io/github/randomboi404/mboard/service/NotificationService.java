@@ -10,40 +10,48 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class NotificationService {
     
-    private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, SseEmitter>> conversationEmitterMap = new ConcurrentHashMap<>();
     private static final long EMITTER_TIMEOUT = 300_000L;
     
-    public SseEmitter getNewEmitter(String sessionId) {
-        if (emitters.containsKey(sessionId)) {
-            SseEmitter old = emitters.get(sessionId);
-            if (old != null) {
-                old.complete();
-            }
+    public SseEmitter getNewEmitter(String conversationId, String sessionId) {
+        Map<String, SseEmitter> sessionToEmitterMap = conversationEmitterMap.computeIfAbsent(
+                conversationId, 
+                k -> new ConcurrentHashMap<>()
+        );
+        
+        SseEmitter existingEmitter = sessionToEmitterMap.get(sessionId);
+        if (existingEmitter != null) {
+            existingEmitter.complete();
         }
         
-        SseEmitter emitter = new SseEmitter(EMITTER_TIMEOUT);
-        emitters.put(sessionId, emitter);
+        SseEmitter newEmitter = new SseEmitter(EMITTER_TIMEOUT);
+        sessionToEmitterMap.put(sessionId, newEmitter);
 
-        emitter.onCompletion(() -> emitters.remove(sessionId, emitter));
-        emitter.onTimeout(() -> emitters.remove(sessionId, emitter));
-        emitter.onError((e) -> emitters.remove(sessionId, emitter));
+        newEmitter.onCompletion(() -> sessionToEmitterMap.remove(sessionId, newEmitter));
+        newEmitter.onTimeout(() -> sessionToEmitterMap.remove(sessionId, newEmitter));
+        newEmitter.onError((e) -> sessionToEmitterMap.remove(sessionId, newEmitter));
 
-        return emitter;
+        return newEmitter;
     }
     
-    public int getEmittersCount() {
-        return emitters.size();
+    public int getActiveEmittersCount(String conversationId) {
+        Map<String, SseEmitter> sessionToEmitterMap = conversationEmitterMap.get(conversationId);
+        return (sessionToEmitterMap != null) ? sessionToEmitterMap.size() : 0;
     }
     
-    public void broadcast(SseEventBuilder builder) {
-        emitters.forEach((id, emitter) -> {
-            try {
-                emitter.send(builder);
-            } catch (IOException e) {
-                emitter.completeWithError(e);
-                emitters.remove(id, emitter);
-            }
-        });
+    public void broadcast(String conversationId, SseEventBuilder builder) {
+        Map<String, SseEmitter> sessionToEmitterMap = conversationEmitterMap.get(conversationId);
+        
+        if (sessionToEmitterMap != null) {
+            sessionToEmitterMap.forEach((sessionId, emitter) -> {
+                try {
+                    emitter.send(builder);
+                } catch (IOException e) {
+                    emitter.completeWithError(e);
+                    sessionToEmitterMap.remove(sessionId, emitter);
+                }
+            });
+        }
     }
     
 }

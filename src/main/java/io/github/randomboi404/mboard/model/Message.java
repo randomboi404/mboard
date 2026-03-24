@@ -26,6 +26,10 @@ public class Message {
     private String id;
     
     @ManyToOne
+    @JoinColumn(name = "conversation_id", nullable = false)
+    private ConversationModel conversation;
+    
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     
@@ -37,8 +41,9 @@ public class Message {
     @PastOrPresent
     @Column(nullable = false, updatable = false)
     private Instant dateTime;
-
-    public Message(User user, String message) {
+    
+    public Message(ConversationModel conversation, User user, String message) {
+        this.conversation = conversation;
         this.user = user;
         this.message = message;
         this.dateTime = Instant.now();
