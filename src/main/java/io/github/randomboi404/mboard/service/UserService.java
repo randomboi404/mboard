@@ -1,6 +1,6 @@
 package io.github.randomboi404.mboard.service;
 
-import io.github.randomboi404.mboard.dto.UserRequest;
+import io.github.randomboi404.mboard.dto.UserRegisterRequest;
 import io.github.randomboi404.mboard.model.User;
 import io.github.randomboi404.mboard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ public class UserService {
     private final UserRepository repo;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
     
-    public String register(UserRequest request) {
+    public String register(UserRegisterRequest request) {
         String username = request.username();
         
         if (repo.findByUsername(username) != null) {

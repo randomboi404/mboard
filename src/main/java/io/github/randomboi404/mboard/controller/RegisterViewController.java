@@ -4,10 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class RegisterController {
+public class RegisterViewController {
     
     @GetMapping("/register")
-    public String login() {
+    public String showRegisterPage() {
         return "redirect:/register.html"; 
     }
     

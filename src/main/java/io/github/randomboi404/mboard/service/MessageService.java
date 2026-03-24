@@ -2,13 +2,13 @@ package io.github.randomboi404.mboard.service;
 
 import io.github.randomboi404.mboard.model.UserPrincipal;
 import io.github.randomboi404.mboard.model.Message;
+import io.github.randomboi404.mboard.dto.MessageRequest;
 import io.github.randomboi404.mboard.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +29,10 @@ public class MessageService {
         repo.deleteById(id);
     }
 
-    public void processAndBroadcast(UserPrincipal userPrincipal, String messageContent) {
+    public void processAndBroadcast(UserPrincipal userPrincipal, MessageRequest request) {
         Message message = new Message(
-                userPrincipal.getUsername(),
-                messageContent,
-                Instant.now().toString()
+                userPrincipal.getUser(),
+                request.message()
         );
         
         this.saveMessage(message);

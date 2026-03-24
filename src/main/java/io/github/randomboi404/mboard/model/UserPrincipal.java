@@ -1,5 +1,6 @@
 package io.github.randomboi404.mboard.model;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,6 +11,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class UserPrincipal implements UserDetails {
 
+    @Getter
     private final User user;
 
     @Override
