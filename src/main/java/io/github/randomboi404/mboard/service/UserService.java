@@ -4,7 +4,7 @@ import io.github.randomboi404.mboard.dto.UserRegisterRequest;
 import io.github.randomboi404.mboard.model.User;
 import io.github.randomboi404.mboard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     
     private final UserRepository repo;
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
+    private final PasswordEncoder encoder;
     
     public String register(UserRegisterRequest request) {
         String username = request.username();
