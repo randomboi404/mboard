@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/chat/{conversationId}")
+@RequestMapping("/api/chat/{conversationId}")
 @RequiredArgsConstructor
 public class MessageController {
 

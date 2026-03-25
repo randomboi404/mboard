@@ -68,8 +68,8 @@ cd mboard
 ### Messages
 | Method | Path | Description | Auth Required |
 | :--- | :--- | :--- | :---: |
-| **GET** | `/chat/{conversationId}` | Get paginated messages list | Yes |
-| **POST** | `/chat/{conversationId}` | Send a message | Yes |
+| **GET** | `/api/chat/{conversationId}` | Get paginated messages list | Yes |
+| **POST** | `/api/chat/{conversationId}` | Send a message | Yes |
 
 **Message Payload**
 | Field | Constraints |
