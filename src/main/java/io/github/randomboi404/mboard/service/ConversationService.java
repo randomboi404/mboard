@@ -5,8 +5,10 @@ import io.github.randomboi404.mboard.model.User;
 import io.github.randomboi404.mboard.repository.ConversationRepository;
 import io.github.randomboi404.mboard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -20,15 +22,24 @@ public class ConversationService {
     private final UserRepository userRepo;
 
     @Transactional
-    public Conversation createConversation(String title, Set<String> userIds, User creator) {
+    public Conversation createConversation(String title, Set<String> userIds, User creator) 
+            throws ResponseStatusException {
+        
         Set<User> participants = new HashSet<>(userRepo.findAllById(userIds));
+
+        if (participants.size() != userIds.size()) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, 
+                "Your list of IDs contains some invalid IDs."
+            );
+        }
+
         participants.add(creator);
-        
+
         Conversation conversation = new Conversation();
-        
         conversation.setTitle(title);
         conversation.setUsers(participants);
-        
+
         return conversationRepo.save(conversation);
     }
 
