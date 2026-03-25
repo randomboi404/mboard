@@ -6,6 +6,7 @@ import io.github.randomboi404.mboard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,10 @@ public class UserService {
         repo.save(newUser);
         
         return "User created successfully!";
+    }
+    
+    public List<User> searchUsers(String query) {  
+        return repo.findByUsernameContainingIgnoreCase(query);
     }
     
 }

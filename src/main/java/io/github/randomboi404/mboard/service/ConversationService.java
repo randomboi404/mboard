@@ -26,13 +26,9 @@ public class ConversationService {
         
         ConversationModel conversation = new ConversationModel();
         
-        if (title == null || title.isBlank()) {
-            conversation.setTitle("New Chat");
-        } else {
-            conversation.setTitle(title);
-        }
-        
+        conversation.setTitle(title);
         conversation.setUsers(participants);
+        
         return conversationRepo.save(conversation);
     }
 
