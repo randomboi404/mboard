@@ -18,7 +18,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConversationModel {
+public class Conversation {
     
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

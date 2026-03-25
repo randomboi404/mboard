@@ -1,6 +1,6 @@
 package io.github.randomboi404.mboard.service;
 
-import io.github.randomboi404.mboard.model.ConversationModel;
+import io.github.randomboi404.mboard.model.Conversation;
 import io.github.randomboi404.mboard.model.User;
 import io.github.randomboi404.mboard.repository.ConversationRepository;
 import io.github.randomboi404.mboard.repository.UserRepository;
@@ -20,11 +20,11 @@ public class ConversationService {
     private final UserRepository userRepo;
 
     @Transactional
-    public ConversationModel createConversation(String title, Set<String> userIds, User creator) {
+    public Conversation createConversation(String title, Set<String> userIds, User creator) {
         Set<User> participants = new HashSet<>(userRepo.findAllById(userIds));
         participants.add(creator);
         
-        ConversationModel conversation = new ConversationModel();
+        Conversation conversation = new Conversation();
         
         conversation.setTitle(title);
         conversation.setUsers(participants);
@@ -32,11 +32,11 @@ public class ConversationService {
         return conversationRepo.save(conversation);
     }
 
-    public List<ConversationModel> getConversationsForUser(User user) {
+    public List<Conversation> getConversationsForUser(User user) {
         return conversationRepo.findByUsersContaining(user);
     }
 
-    public Optional<ConversationModel> getConversation(String id) {
+    public Optional<Conversation> getConversation(String id) {
         return conversationRepo.findById(id);
     }
     

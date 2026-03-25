@@ -27,7 +27,7 @@ public class Message {
     
     @ManyToOne
     @JoinColumn(name = "conversation_id", nullable = false)
-    private ConversationModel conversation;
+    private Conversation conversation;
     
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -42,7 +42,7 @@ public class Message {
     @Column(nullable = false, updatable = false)
     private Instant dateTime;
     
-    public Message(ConversationModel conversation, User user, String message) {
+    public Message(Conversation conversation, User user, String message) {
         this.conversation = conversation;
         this.user = user;
         this.message = message;

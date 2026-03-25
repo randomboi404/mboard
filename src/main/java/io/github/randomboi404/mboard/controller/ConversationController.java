@@ -1,7 +1,7 @@
 package io.github.randomboi404.mboard.controller;
 
 import io.github.randomboi404.mboard.dto.ConversationRequest;
-import io.github.randomboi404.mboard.model.ConversationModel;
+import io.github.randomboi404.mboard.model.Conversation;
 import io.github.randomboi404.mboard.model.UserPrincipal;
 import io.github.randomboi404.mboard.service.ConversationService;
 import jakarta.validation.Valid;
@@ -21,14 +21,14 @@ public class ConversationController {
     private final ConversationService conversationService;  
   
     @GetMapping  
-    public List<ConversationModel> listConversations(  
+    public List<Conversation> listConversations(  
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {  
         return conversationService.getConversationsForUser(userPrincipal.getUser());  
     }  
   
     @PostMapping  
-    public ConversationModel createConversation(  
+    public Conversation createConversation(  
             @AuthenticationPrincipal UserPrincipal userPrincipal,  
             @Valid @RequestBody ConversationRequest request
     ) {  
@@ -39,7 +39,7 @@ public class ConversationController {
   
     @GetMapping("/{id}")  
     @PreAuthorize("@conversationSecurityService.canUserAccessConversation(#userPrincipal.user, #id)")  
-    public ConversationModel getConversation(  
+    public Conversation getConversation(  
             @AuthenticationPrincipal UserPrincipal userPrincipal,  
             @PathVariable String id
     ) {  

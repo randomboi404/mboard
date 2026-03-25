@@ -1,6 +1,6 @@
 package io.github.randomboi404.mboard.service;
 
-import io.github.randomboi404.mboard.model.ConversationModel;
+import io.github.randomboi404.mboard.model.Conversation;
 import io.github.randomboi404.mboard.model.Message;
 import io.github.randomboi404.mboard.model.UserPrincipal;
 import io.github.randomboi404.mboard.dto.MessageRequest;
@@ -33,10 +33,10 @@ public class MessageService {
     }
 
     public void processAndBroadcast(UserPrincipal userPrincipal, MessageRequest request, String conversationId) {
-        ConversationModel conversationModel = conversationRepo.getReferenceById(conversationId);
+        Conversation conversation = conversationRepo.getReferenceById(conversationId);
         
         Message message = new Message(
-                conversationModel,
+                conversation,
                 userPrincipal.getUser(),
                 request.message()
         );
