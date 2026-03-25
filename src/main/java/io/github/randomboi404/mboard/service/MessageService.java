@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,19 +20,20 @@ public class MessageService {
     private final MessageRepository repo;
     private final ConversationRepository conversationRepo;
     private final NotificationService notificationService;
-
+    
     public Page<Message> getMessages(String conversationId, Pageable pageable) {
         return repo.findByConversationIdOrderByDateTimeDesc(conversationId, pageable);
     }
-
+    
     public void saveMessage(Message message) {
         repo.save(message);
     }
-
+    
     public void deleteMessage(String id) {
         repo.deleteById(id);
     }
-
+    
+    @Transactional
     public void processAndBroadcast(UserPrincipal userPrincipal, MessageRequest request, String conversationId) {
         Conversation conversation = conversationRepo.getReferenceById(conversationId);
         

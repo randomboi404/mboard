@@ -3,6 +3,7 @@ package io.github.randomboi404.mboard.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
+import org.springframework.scheduling.annotation.Async;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,6 +40,7 @@ public class NotificationService {
         return (sessionToEmitterMap != null) ? sessionToEmitterMap.size() : 0;
     }
     
+    @Async
     public void broadcast(String conversationId, SseEventBuilder builder) {
         Map<String, SseEmitter> sessionToEmitterMap = conversationEmitterMap.get(conversationId);
         
