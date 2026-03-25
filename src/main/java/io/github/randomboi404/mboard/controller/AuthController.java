@@ -4,6 +4,8 @@ import io.github.randomboi404.mboard.dto.UserRegisterRequest;
 import io.github.randomboi404.mboard.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +19,9 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public String registerNewUser(@Valid @RequestBody UserRegisterRequest request) {
-        return userService.register(request);
+    @ResponseStatus(HttpStatus.CREATED)
+    public void registerNewUser(@Valid @RequestBody UserRegisterRequest request) {
+        userService.register(request);
     }
     
 }
